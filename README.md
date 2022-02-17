@@ -1,0 +1,2 @@
+# Wordle Solver
+Intended to solve the Wordle puzzle game from the New York Times. Continually suggests the optimal word that matches the current pattern until answer is found. Optimal word is calculated using a custom scoring algorithm taking into account number unique vowels and rarity of the word.
