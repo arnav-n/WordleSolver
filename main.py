@@ -39,35 +39,71 @@ GUESSES = 6
 fname = 'wordlist.txt'
 with open(fname) as file:
     wordbank = [line.strip() for line in file if len(line.strip())==WORDLEN]
-print(len(wordbank))
+print(str(len(wordbank)) + " words read into wordbank")
 
 #set represents all current possible letters for that position, pattern is same length as WORDLEN
 pattern = [set(string.ascii_lowercase) for x in range(WORDLEN)]
 
+def print_pattern():
+    for x in pattern:
+        print(x)
+
+
 #update pattern with feedback of guess
-def newFeedback(feedback, guess):
+def new_feedback(feedback, guess):
+    assert ((len(guess) == WORDLEN) and (len(feedback) == WORDLEN))
     for i in range(WORDLEN):
-        if(feedback[i]=='b'):
+        if feedback[i]=='b':
             for x in pattern:
-                x.remove(guess[i])
-        elif(feedback[i]=='y'):
-            pattern[i].remove(guess[i])
-        elif(feedback[i]=='g'):
+                x.discard(guess[i])
+        elif feedback[i]=='y':
+            pattern[i].discard(guess[i])
+        elif feedback[i]=='g':
             pattern[i] = {guess[i]}
 
 #check if a word satisfies pattern
-def checkGuess(word):
+def check_guess(word):
+    assert (len(word) == WORDLEN)
     for i in range(WORDLEN):
-        if(word[i] not in pattern[i]):
+        if word[i] not in pattern[i]:
             return False
     return True
 
+#calculates score by checking how many words share the letter in each position of the target
+#possibly add a bias towards unique vowels if no vowels have been found
+def score_word(word):
+    assert(len(word)==WORDLEN)
+    score = 0.0
+    for p in range(WORDLEN):
+        for y in wordbank:
+            if y[p]==word[p]:
+                score+=1/len(wordbank)
+    return score
 
+def suggest_guess():
+    curMaxScore = 0
+    curBestGuess = "1z1z1"
+    for y in wordbank:
+        # print(check_guess(y))
+        if(check_guess(y)):
+            # if(score_word(y)>curMaxScore):
+            #     curMaxScore = score_word(y)
+            #     curBestGuess = y
+            print(y)
+    return curBestGuess
 
+#
+new_feedback("bbbbg", "crane")
+new_feedback("byybb", "peons")
+new_feedback("bgbyy","toled")
+new_feedback("bgbbg", "noise")
+new_feedback("ggbbg", "douse")
+# print_pattern()
+
+print(suggest_guess())
 #TO DO
-#   implement scoreWord(word) function
+#   should I fix yellow logic as follows?: guesses MUST contain all yellow and green letters
 #   implement a loop that does the following:
-
 #       find word with max score that matches pattern
 #       suggest word
 #       accept feedback from user
