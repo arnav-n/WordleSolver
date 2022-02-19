@@ -118,10 +118,5 @@ def playWordle():
             print("Best Guess: " + curGuess)
     print("Out of attempts. Sorry!")
 
-
 playWordle()
-
-#TO DO
-#   fix yellow logic: guess must contain all yellow letters to pass check
-#   initial suggestion is hardcoded: takes too long to suggest first guess
 
