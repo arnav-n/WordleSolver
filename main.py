@@ -40,6 +40,7 @@ with open(fname) as file:
 
 #set represents all current possible letters for that position, pattern is same length as WORDLEN
 pattern = [set(string.ascii_lowercase) for x in range(WORDLEN)]
+yellowLetters = set()
 
 def print_pattern():
     for x in pattern:
@@ -55,6 +56,7 @@ def new_feedback(guess, feedback):
                 if(len(x)>1):
                     x.discard(guess[i])
         elif feedback[i]=='y':
+            yellowLetters.add(guess[i])
             pattern[i].discard(guess[i])
         elif feedback[i]=='g':
             pattern[i] = {guess[i]}
@@ -65,6 +67,9 @@ def new_feedback(guess, feedback):
 #check if a word satisfies pattern (filter)
 def check_guess(word):
     assert (len(word) == WORDLEN)
+    for x in yellowLetters:
+        if(x not in set(word)):
+            return False
     for i in range(WORDLEN):
         if word[i] not in pattern[i]:
             return False
@@ -98,20 +103,23 @@ def suggest_guess():
 
 #PLAY A GAME
 def playWordle():
+    print("Welcome to Wordle Solver!")
     curGuess = "salet"
     for i in range(1, GUESSES):
-        print("Best Guess: " + curGuess)
+        print("\n"+"Best Guess: " + curGuess)
         feedback = input("Enter the color of each tile (b, y, or g): ")
         if (feedback == "ggggg"):
             print("Wordle Completed!")
-            break
+            return
+        print("Possible Words (with score): ")
         new_feedback(curGuess, feedback)
-        if (i < GUESSES):
-            curGuess = suggest_guess()
+        curGuess = suggest_guess()
+        if (i == GUESSES-1):
             print("Best Guess: " + curGuess)
     print("Out of attempts. Sorry!")
 
 
+playWordle()
 
 #TO DO
 #   fix yellow logic: guess must contain all yellow letters to pass check
