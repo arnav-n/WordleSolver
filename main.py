@@ -105,14 +105,16 @@ def suggest_guess():
 def playWordle():
     print("Welcome to Wordle Solver!")
     curGuess = "salet"
+    actualGuess = ""
     for i in range(1, GUESSES):
         print("\n"+"Best Guess: " + curGuess)
+        actualGuess = input("Enter the word you guessed: ")
         feedback = input("Enter the color of each tile (b, y, or g): ")
         if (feedback == "ggggg"):
             print("Wordle Completed!")
             return
         print("Possible Words (with score): ")
-        new_feedback(curGuess, feedback)
+        new_feedback(actualGuess, feedback)
         curGuess = suggest_guess()
         if (i == GUESSES-1):
             print("Best Guess: " + curGuess)
